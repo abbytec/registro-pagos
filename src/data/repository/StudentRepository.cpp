@@ -4,10 +4,21 @@
 
 bool StudentRepository::add(const QString &doc, const QString &fullName, QString *error)
 {
+    const QString d = doc.trimmed();
+    const QString n = fullName.trimmed();
+
+    // Validación: ambos campos son obligatorios
+    if (d.isEmpty() || n.isEmpty())
+    {
+        if (error)
+            *error = QStringLiteral("Documento y nombre son obligatorios.");
+        return false;
+    }
+
     QSqlQuery q(Database::db());
     q.prepare("INSERT INTO students(doc, full_name) VALUES(?,?)");
-    q.addBindValue(doc.trimmed());
-    q.addBindValue(fullName.trimmed());
+    q.addBindValue(d);
+    q.addBindValue(n);
     if (!q.exec())
     {
         if (error)
