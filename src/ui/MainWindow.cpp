@@ -3,8 +3,10 @@
 #include "./data/repository/PaymentRepository.h"
 #include "./data/Database.h"
 #include "LicenseManager.h"
+#include "TableUtils.h"
 #include <QtWidgets>
 #include <QtSql>
+#include <QVector>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
                                           studentsModel(nullptr), paymentsModel(nullptr), searchModel(nullptr)
@@ -99,10 +101,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // Modelos
     studentsModel = StudentRepository::model(this);
     studentsTable->setModel(studentsModel);
+    TableUtils::applyInteractiveMinPerColumn(studentsTable, QVector<int>{48, 175, 232, 175}, 48);
     paymentsModel = PaymentRepository::all(this);
     paymentsTable->setModel(paymentsModel);
+    TableUtils::applyInteractiveMinPerColumn(paymentsTable, QVector<int>{48, 175, 232, 72, 128, 128, 256}, 48);
     searchModel = new QSqlQueryModel(this);
     searchTable->setModel(searchModel);
+    TableUtils::applyInteractiveMinPerColumn(searchTable, QVector<int>{48, 175, 232, 72, 128, 128, 256}, 48);
 
     // Conexiones
     connect(addStudentBtn, &QPushButton::clicked, this, [this]()
